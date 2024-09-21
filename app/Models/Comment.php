@@ -21,7 +21,7 @@ class Comment extends Model
         return $this->belongsTo(Task::class);
     }
 
-    public function user(): BelongsTo
+    public function users(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

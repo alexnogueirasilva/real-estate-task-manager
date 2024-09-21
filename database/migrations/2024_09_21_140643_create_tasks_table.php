@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\{Building, User};
+use App\Models\{Building};
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,10 +14,10 @@ return new class() extends Migration {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Building::class)->constrained();
-            $table->foreignIdFor(User::class)->constrained();
+            $table->foreignId('assigned_to')->constrained('users');
             $table->string('title');
             $table->text('description');
-            $table->enum('status', ['open', 'in_progress', 'canceled' , 'done']);
+            $table->enum('status', ['open', 'in_progress', 'canceled' , 'done'])->default('open');
             $table->timestamps();
         });
     }
