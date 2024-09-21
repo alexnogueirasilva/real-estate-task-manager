@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\TaskController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,3 +20,7 @@ Route::get('/', function () {
         200
     );
 })->name('api.status');
+
+Route::prefix('buildings/{building}')->group(function () {
+    Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
+});

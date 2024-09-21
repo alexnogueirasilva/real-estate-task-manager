@@ -20,7 +20,7 @@ class TaskFactory extends Factory
         return [
             'title'       => $this->faker->sentence,
             'description' => $this->faker->paragraph,
-            'status'      => $this->faker->randomElement(['open', 'closed']),
+            'status'      => $this->faker->randomElement(['open', 'in_progress', 'canceled', 'done']),
             'assigned_to' => UserFactory::new(),
             'building_id' => BuildingFactory::new(),
         ];

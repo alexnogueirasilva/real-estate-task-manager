@@ -10,15 +10,42 @@ it('should be able to list comments with tasks', function () {
     $task     = Task::factory()->create(['building_id' => $building->id]);
     $comment  = Comment::factory()->create(['task_id' => $task->id, 'user_id' => $user->id]);
 
-    $response = getJson(route('buildings.tasks.comments.index', [$building->id, $task->id]));
+    $response = getJson(route('tasks.index', [$building->id, $task->id]));
 
-    $response->assertStatus(200);
-    $response->assertJson([
-        'data' => [
-            [
-                'id'      => $comment->id,
-                'task_id' => $task->id,
-                'comment' => $comment->comment,
+    $response->assertJsonStructure([
+        'id',
+        'name',
+        'address',
+        'created_at',
+        'updated_at',
+        'tasks' => [
+            '*' => [
+                'id',
+                'building_id',
+                'assigned_to',
+                'title',
+                'description',
+                'status',
+                'created_at',
+                'updated_at',
+                'user' => [
+                    'id',
+                    'name',
+                    'email',
+                    'email_verified_at',
+                    'created_at',
+                    'updated_at',
+                ],
+                'comments' => [
+                    '*' => [
+                        'id',
+                        'task_id',
+                        'user_id',
+                        'comment',
+                        'created_at',
+                        'updated_at',
+                    ],
+                ],
             ],
         ],
     ]);
