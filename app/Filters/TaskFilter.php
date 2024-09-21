@@ -3,6 +3,7 @@
 namespace App\Filters;
 
 use App\Models\{Building, Task};
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
 class TaskFilter
@@ -46,6 +47,13 @@ class TaskFilter
         } else {
 
             $query->with(['comments.user', 'user']);
+        }
+
+        if (isset($filters['created_from'], $filters['created_to'])) {
+            $startDate = Carbon::parse($filters['created_from'])->startOfDay();
+            $endDate   = Carbon::parse($filters['created_to'])->endOfDay();
+
+            $query->whereBetween('created_at', [$startDate, $endDate]);
         }
 
         return $query;

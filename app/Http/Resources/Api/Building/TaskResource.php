@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Api\Building;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -13,6 +14,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string $description
  * @property string $status
  * @property User $user
+ * @property Carbon $created_at
  * @property Collection $comments
  */
 class TaskResource extends JsonResource
@@ -31,6 +33,7 @@ class TaskResource extends JsonResource
             'description' => $this->description,
             'status'      => $this->status,
             'assigned_to' => $this->user->name,
+            'created_at'  => $this->created_at->format('Y-m-d'),
             'comments'    => CommentResource::collection($this->whenLoaded('comments')),
         ];
     }

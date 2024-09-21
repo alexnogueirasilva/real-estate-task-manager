@@ -1,8 +1,9 @@
 <?php
 
 use App\Models\{Building, Comment, Task, User};
+use Carbon\Carbon;
 
-use function Pest\Laravel\getJson;
+use function Pest\Laravel\{getJson, postJson};
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -49,11 +50,27 @@ it('filtra tarefas com diferentes filtros', function ($filters, $expectedTitle, 
 
     $user = User::factory()->create(['name' => 'John Doe']);
 
-    $task1 = Task::factory()->create(['title' => 'Consertar elevador', 'status' => 'done', 'building_id' => $building->id]);
+    $task1 = Task::factory()->create([
+        'title'       => 'Consertar elevador',
+        'status'      => 'done',
+        'building_id' => $building->id,
+        'created_at'  => Carbon::create(2024, 9, 10),
+    ]);
     Comment::factory()->create(['task_id' => $task1->id, 'user_id' => $user->id, 'comment' => 'Elevador consertado']);
 
-    Task::factory()->create(['title' => 'Reparar telhado', 'status' => 'in_progress', 'building_id' => $building->id]);
-    Task::factory()->create(['title' => 'Pintar o saguão', 'status' => 'open', 'building_id' => $building->id]);
+    Task::factory()->create([
+        'title'       => 'Reparar telhado',
+        'status'      => 'in_progress',
+        'building_id' => $building->id,
+        'created_at'  => Carbon::create(2024, 9, 11),
+    ]);
+
+    Task::factory()->create([
+        'title'       => 'Pintar o saguão',
+        'status'      => 'open',
+        'building_id' => $building->id,
+        'created_at'  => Carbon::create(2024, 9, 13),
+    ]);
 
     $response = getJson(route('tasks.index', array_merge(['building' => $building->id], $filters)));
 
@@ -70,4 +87,43 @@ it('filtra tarefas com diferentes filtros', function ($filters, $expectedTitle, 
     [['comment_user' => 'John Doe'], 'Consertar elevador', ['Reparar telhado', 'Pintar o saguão']],
     [['task_keyword' => 'Consertar', 'status' => 'done'], 'Consertar elevador', ['Reparar telhado', 'Pintar o saguão']],
     [['task_keyword' => 'Consertar', 'status' => 'done', 'comment_user' => 'John Doe'], 'Consertar elevador', ['Reparar telhado', 'Pintar o saguão']],
+    [['created_from' => '2024-09-10', 'created_to' => '2024-09-11'], 'Reparar telhado', ['Pintar o saguão']],
+    [['created_from' => '2024-09-10', 'created_to' => '2024-09-12'], 'Consertar elevador', ['Pintar o saguão']],
 ]);
+
+it('creates a new task for a building', function () {
+    $building = Building::factory()->create();
+    $user     = User::factory()->create();
+
+    $payload = [
+        'title'       => 'Consertar elevador',
+        'description' => 'O elevador do edifício precisa de conserto',
+        'status'      => 'open',
+        'assigned_to' => $user->id,
+    ];
+
+    $response = postJson(route('tasks.store', $building->id), $payload);
+
+    $response->assertStatus(Response::HTTP_CREATED)
+        ->assertJsonFragment([
+            'title'  => 'Consertar elevador',
+            'status' => 'open',
+        ]);
+});
+
+it('add a comment to a task', function () {
+    $task = Task::factory()->create();
+    $user = User::factory()->create();
+
+    $payload = [
+        'comment' => 'O conserto do elevador foi finalizado com sucesso',
+        'user_id' => $user->id,
+    ];
+
+    $response = postJson(route('comments.store', $task->id), $payload);
+
+    $response->assertStatus(Response::HTTP_CREATED)
+        ->assertJsonFragment([
+            'comment' => 'O conserto do elevador foi finalizado com sucesso',
+        ]);
+});

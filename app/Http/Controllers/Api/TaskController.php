@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Filters\TaskFilter;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Building\BuildingRequest;
-use App\Http\Resources\Api\Building\BuildingResource;
+use App\Http\Requests\Api\Building\{BuildingRequest, StoreTaskRequest};
+use App\Http\Resources\Api\Building\{BuildingResource, TaskResource};
 use App\Models\{Building, Comment, Task};
 use Illuminate\Database\Eloquent\Collection;
 
@@ -39,5 +39,19 @@ class TaskController extends Controller
         $building->setRelation('tasks', $tasks);
 
         return new BuildingResource($building);
+    }
+
+    /**
+     * Store a newly created task in storage.
+     *
+     * @param StoreTaskRequest $request
+     * @param Building $building
+     * @return TaskResource
+     */
+    public function store(StoreTaskRequest $request, Building $building): TaskResource
+    {
+        $task = $building->tasks()->create($request->validated());
+
+        return new TaskResource($task);
     }
 }

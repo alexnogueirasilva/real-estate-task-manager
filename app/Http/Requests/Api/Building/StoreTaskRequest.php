@@ -5,7 +5,7 @@ namespace App\Http\Requests\Api\Building;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class BuildingRequest extends FormRequest
+class StoreTaskRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,12 +23,10 @@ class BuildingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'task_keyword'    => ['nullable', 'string', 'max:255'],
-            'status'          => ['nullable', 'string', 'in:open,in_progress,canceled,done'],
-            'comment_keyword' => ['nullable', 'string', 'max:255'],
-            'comment_user'    => ['nullable', 'string', 'max:255'],
-            'created_from'    => ['nullable', 'date'],
-            'created_to'      => ['nullable', 'date', 'after_or_equal:created_from'],
+            'title'       => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'status'      => ['required', 'string', 'in:open,in_progress,canceled,done'],
+            'assigned_to' => ['required', 'integer', 'exists:users,id'],
         ];
     }
 }
