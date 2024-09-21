@@ -8,7 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @property string $comment
- * @property User $users
+ * @property User $user
  * @property Task $task
  */
 class CommentResource extends JsonResource
@@ -22,8 +22,7 @@ class CommentResource extends JsonResource
     {
         return [
             'comment' => $this->comment,
-            'user'    => $this->users->name,
-            'task'    => $this->task,
+            'user'    => $this->user->name,
         ];
     }
 }
