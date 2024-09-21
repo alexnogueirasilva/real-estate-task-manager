@@ -111,6 +111,32 @@ it('creates a new task for a building', function () {
         ]);
 });
 
+test('validation rules for task creation', function ($f) {
+    $building = Building::factory()->create();
+
+    $payload = [
+        $f->field => $f->value,
+    ];
+
+    if (property_exists($f, 'aValue')) {
+        $payload[$f->aField] = $f->aValue;
+    }
+
+    $response = postJson(route('tasks.store', $building->id), $payload);
+
+    $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+        ->assertJsonValidationErrors([$f->field]);
+
+})->with([
+    'title::required'       => (object)['field' => 'title', 'value' => '', 'rule' => 'required'],
+    'title::max:255'        => (object)['field' => 'title', 'value' => str_repeat('*', 256), 'rule' => 'max'],
+    'description::required' => (object)['field' => 'description', 'value' => '', 'rule' => 'required'],
+    'status::required'      => (object)['field' => 'status', 'value' => '', 'rule' => 'required'],
+    'status::in'            => (object)['field' => 'status', 'value' => 'invalid_status', 'rule' => 'in'],
+    'assigned_to::required' => (object)['field' => 'assigned_to', 'value' => null, 'rule' => 'required'],
+    'assigned_to::exists'   => (object)['field' => 'assigned_to', 'value' => 999, 'rule' => 'exists'],
+]);
+
 it('adds a comment to a task', function () {
     $task = Task::factory()->create();
     $user = User::factory()->create();
@@ -120,7 +146,6 @@ it('adds a comment to a task', function () {
         'user_id' => $user->id,
     ];
 
-    // Note como estamos passando tanto o 'building_id' quanto o 'task_id' para a rota
     $response = postJson(route('comments.store', ['task' => $task->id]), $payload);
 
     $response->assertStatus(Response::HTTP_CREATED)
