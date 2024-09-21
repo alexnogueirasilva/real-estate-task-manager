@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\TaskController;
+use App\Http\Controllers\Api\{CommentController, TaskController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,7 +21,11 @@ Route::get('/', function () {
     );
 })->name('api.status');
 
-Route::prefix('buildings/{building}')->group(function () {
+Route::prefix('tasks/{building}')->group(function () {
     Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
     Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
+});
+
+Route::prefix('tasks/{task}')->group(function () {
+    Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 });

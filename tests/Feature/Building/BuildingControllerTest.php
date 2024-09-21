@@ -111,7 +111,7 @@ it('creates a new task for a building', function () {
         ]);
 });
 
-it('add a comment to a task', function () {
+it('adds a comment to a task', function () {
     $task = Task::factory()->create();
     $user = User::factory()->create();
 
@@ -120,7 +120,8 @@ it('add a comment to a task', function () {
         'user_id' => $user->id,
     ];
 
-    $response = postJson(route('comments.store', $task->id), $payload);
+    // Note como estamos passando tanto o 'building_id' quanto o 'task_id' para a rota
+    $response = postJson(route('comments.store', ['task' => $task->id]), $payload);
 
     $response->assertStatus(Response::HTTP_CREATED)
         ->assertJsonFragment([
