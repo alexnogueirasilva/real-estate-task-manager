@@ -23,10 +23,10 @@ class BuildingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'task_keyword'    => ['nullable', 'string', 'regex:/^[\pL\s\-0-9]+$/u', 'max:255'],
+            'task_keyword'    => ['nullable', 'string', 'max:255'],
             'status'          => ['nullable', 'string', 'in:open,in_progress,canceled,done'],
-            'comment_keyword' => ['nullable', 'string', 'regex:/^[\pL\s\-0-9]+$/u', 'max:255'],
-            'comment_user'    => ['nullable', 'string', 'regex:/^[\pL\s\-]+$/u', 'max:255'],
+            'comment_keyword' => ['nullable', 'string', 'max:255'],
+            'comment_user'    => ['nullable', 'string', 'max:255'],
         ];
     }
 }

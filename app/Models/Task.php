@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
-use Illuminate\Database\Eloquent\{Builder, Collection, Model};
+use Illuminate\Database\Eloquent\{Builder, Collection, Factories\HasFactory, Model};
 
 /**
  * @property mixed $comments
  */
 class Task extends Model
 {
+    use HasFactory;
     /**
      * Class Task
      *
