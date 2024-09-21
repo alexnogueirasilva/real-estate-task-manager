@@ -4,23 +4,23 @@ namespace App\Http\Controllers\Api;
 
 use App\Filters\TaskFilter;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Building\BuildingRequest;
 use App\Http\Resources\Api\Building\BuildingResource;
 use App\Models\{Building, Comment, Task};
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
     /**
      * Display filtered tasks of a building.
      *
-     * @param  Building  $building
-     * @param  Request   $request
+     * @param Building $building
+     * @param BuildingRequest $request
      * @return BuildingResource
      */
-    public function index(Building $building, Request $request): BuildingResource
+    public function index(Building $building, BuildingRequest $request): BuildingResource
     {
-        $filters = $request->only(['task_keyword', 'status', 'comment_keyword', 'comment_user']);
+        $filters = $request->validated();
 
         $tasksQuery = TaskFilter::apply($building, $filters);
 
