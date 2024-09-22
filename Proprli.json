@@ -1,0 +1,146 @@
+{
+  "info": {
+    "name": "Proprli",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Comments",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "auth": null,
+        "description": "",
+        "url": {
+          "raw": "http://localhost:85/tasks/151/comments",
+          "protocol": "http",
+          "host": [
+            "localhost:85"
+          ],
+          "path": [
+            "tasks",
+            "151",
+            "comments"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"comment\": \"Elevador corrigido com sucesso\",\n  \"user_id\": 3\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Post Tasks",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Application",
+            "value": "apllication/json",
+            "disabled": false,
+            "type": "default"
+          }
+        ],
+        "auth": null,
+        "description": "",
+        "url": {
+          "raw": "http://localhost:85/building/10/tasks",
+          "protocol": "http",
+          "host": [
+            "localhost:85"
+          ],
+          "path": [
+            "building",
+            "10",
+            "tasks"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Consertar elevador andar 10\",\n  \"description\": \"O elevador do edifício precisa de conserto\",\n  \"status\": \"open\",\n  \"assigned_to\": 1\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Tasks",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Application",
+            "value": "apllication/json",
+            "disabled": false,
+            "type": "default"
+          }
+        ],
+        "auth": null,
+        "description": "",
+        "url": {
+          "raw": "http://localhost:85/building/10/tasks?task_keyword=Consertar elevador",
+          "protocol": "http",
+          "host": [
+            "localhost:85"
+          ],
+          "path": [
+            "building",
+            "10",
+            "tasks"
+          ],
+          "query": [
+            {
+              "key": "task_keyword",
+              "value": "Consertar elevador"
+            },
+            {
+              "key": "created_from",
+              "value": "2024-09-08"
+            },
+            {
+              "key": "created_to",
+              "value": "2024-09-21"
+            },
+            {
+              "key": "status",
+              "value": "canceled"
+            },
+            {
+              "key": "comment_user",
+              "value": "Will Hill I"
+            },
+            {
+              "key": "comment_keyword",
+              "value": "Esse modi accusantium dolores facilis deserunt voluptatem voluptates assumenda."
+            },
+            {
+              "key": "status",
+              "value": "done"
+            }
+          ],
+          "variable": []
+        }
+      }
+    },
+    {
+      "name": "bruno",
+      "event": []
+    }
+  ],
+  "variable": []
+}
