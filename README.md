@@ -1,6 +1,5 @@
 Aqui está o README atualizado em português e formatado corretamente em markdown:
 
-```markdown
 # API de Gerenciamento de Tarefas para Imóveis
 
 Esta é uma API RESTful desenvolvida com Laravel 10 para gerenciar tarefas e comentários relacionados a edifícios.
