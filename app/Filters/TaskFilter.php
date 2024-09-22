@@ -17,7 +17,6 @@ class TaskFilter
      */
     public static function apply(Building $building, array $filters): Builder
     {
-        // Modificação: Pegue a query do relacionamento HasMany para trabalhar com o Builder
         /** @var Builder<Task> $query */
         $query = $building->tasks()->getQuery();
 
@@ -49,14 +48,13 @@ class TaskFilter
             $query->with(['comments.user', 'user']);
         }
 
-        if (isset($filters['created_from'], $filters['created_to'])) {
+        if (isset($filters['created_from'], $filters['created_to']) && is_string($filters['created_from']) && is_string($filters['created_to'])) {
             $startDate = Carbon::parse($filters['created_from'])->startOfDay();
             $endDate   = Carbon::parse($filters['created_to'])->endOfDay();
 
             $query->whereBetween('created_at', [$startDate, $endDate]);
         }
 
-        // Certifique-se de retornar o Builder corretamente
         return $query;
     }
 }
