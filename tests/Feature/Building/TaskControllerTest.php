@@ -21,18 +21,29 @@ it('should be able to list tasks with comments', function () {
             'name',
             'address',
             'tasks' => [
-                '*' => [
-                    'id',
-                    'title',
-                    'description',
-                    'status',
-                    'assigned_to',
-                    'comments' => [
-                        '*' => [
-                            'comment',
-                            'user',
+                'data' => [
+                    '*' => [
+                        'id',
+                        'title',
+                        'description',
+                        'status',
+                        'assigned_to',
+                        'created_at',
+                        'comments' => [
+                            '*' => [
+                                'comment',
+                                'user',
+                            ],
                         ],
                     ],
+                ],
+                'pagination' => [
+                    'total',
+                    'per_page',
+                    'current_page',
+                    'last_page',
+                    'next_page_url',
+                    'prev_page_url',
                 ],
             ],
         ],

@@ -17,6 +17,7 @@ class TaskFilter
      */
     public static function apply(Building $building, array $filters): Builder
     {
+        // Modificação: Pegue a query do relacionamento HasMany para trabalhar com o Builder
         /** @var Builder<Task> $query */
         $query = $building->tasks()->getQuery();
 
@@ -45,7 +46,6 @@ class TaskFilter
                 });
             }]);
         } else {
-
             $query->with(['comments.user', 'user']);
         }
 
@@ -56,6 +56,7 @@ class TaskFilter
             $query->whereBetween('created_at', [$startDate, $endDate]);
         }
 
+        // Certifique-se de retornar o Builder corretamente
         return $query;
     }
 }

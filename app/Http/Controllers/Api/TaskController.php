@@ -6,8 +6,7 @@ use App\Filters\TaskFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Building\{BuildingRequest, StoreTaskRequest};
 use App\Http\Resources\Api\Building\{BuildingResource, TaskResource};
-use App\Models\{Building, Comment, Task};
-use Illuminate\Database\Eloquent\Collection;
+use App\Models\{Building};
 
 class TaskController extends Controller
 {
@@ -24,21 +23,13 @@ class TaskController extends Controller
 
         $tasksQuery = TaskFilter::apply($building, $filters);
 
-        /** @var Collection<int, Task> $tasks */
-        $tasks = $tasksQuery->get();
+        $tasksQuery->with(['comments' => function ($query) {
+            $query->orderBy('created_at', 'desc');
+        }]);
 
-        if (isset($filters['comment_user']) && is_string($filters['comment_user'])) {
-            $tasks = $tasks->filter(function (Task $task): bool {
-                $comments = $task->comments;
-                assert($comments instanceof Collection && $comments->first() instanceof Comment);
+        $tasks = $tasksQuery->paginate(10);
 
-                return $comments->isNotEmpty();
-            })->values();
-        }
-
-        $building->setRelation('tasks', $tasks);
-
-        return new BuildingResource($building);
+        return new BuildingResource($building->setRelation('tasks', $tasks));
     }
 
     /**

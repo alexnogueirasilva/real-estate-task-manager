@@ -21,7 +21,7 @@ Route::get('/', function () {
     );
 })->name('api.status');
 
-Route::prefix('tasks/{building}')->group(function () {
+Route::prefix('building/{building}')->group(function () {
     Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
     Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
 });
